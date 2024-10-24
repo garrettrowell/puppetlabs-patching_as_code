@@ -344,7 +344,7 @@ class patching_as_code (
           $updates_to_install = $_updates_to_install
         }
         if ($available_updates.length > $updates_to_install.length) {
-          notify { "Not patching the following package(s): ${available_updates - updates_install} due to the configured blocklist.": }
+          notify { "Not patching the following package(s): ${available_updates - updates_to_install} due to the configured blocklist.": }
         }
       }
       default: {
@@ -365,7 +365,7 @@ class patching_as_code (
           $updates_to_install = $_updates_to_install
         }
         if ($available_updates.length > $updates_to_install.length) {
-          notify { "Not patching the following package(s): ${available_updates - updates_install} due to the configured blocklist.": }
+          notify { "Not patching the following package(s): ${available_updates - updates_to_install} due to the configured blocklist.": }
         }
       }
     }
