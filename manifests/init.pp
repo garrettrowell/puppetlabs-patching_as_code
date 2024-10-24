@@ -343,6 +343,7 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
+        notify { "available_updates: ${available_updates}": }
         notify { "updates_to_install: ${updates_to_install}": }
       }
       default: {
@@ -362,6 +363,7 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
+        notify { "available_updates: ${available_updates}": }
         notify { "updates_to_install: ${updates_to_install}": }
       }
     }
