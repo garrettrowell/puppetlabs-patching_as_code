@@ -346,6 +346,7 @@ class patching_as_code (
         if ($available_updates.length > $updates_to_install.length) {
           $_diff = $available_updates - $updates_to_install
           notify { "Not patching the following package(s): ${_diff} due to the configured blocklist.": }
+          notice('imatest')
         }
       }
       default: {
@@ -366,7 +367,8 @@ class patching_as_code (
           $updates_to_install = $_updates_to_install
         }
         if ($available_updates.length > $updates_to_install.length) {
-          notify { "Not patching the following package(s): ${available_updates - updates_to_install} due to the configured blocklist.": }
+          $_diff = $available_updates - $updates_to_install
+          notify { "Not patching the following package(s): ${_diff} due to the configured blocklist.": }
         }
       }
     }
