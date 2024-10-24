@@ -14,7 +14,7 @@ class patching_as_code::linux::patchday (
   Array $updates,
   Array $choco_updates = [],
   Array $high_prio_updates = [],
-  Array $high_prio_choco_updates = []
+  Array $high_prio_choco_updates = [],
   Array $install_options = []
 ) {
   case $facts['package_provider'] {
