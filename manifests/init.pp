@@ -343,8 +343,9 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
-        notify { "available_updates: ${available_updates}": }
-        notify { "updates_to_install: ${updates_to_install}": }
+        if ($available_updates.length > $updates_to_install.length) {
+          notify { "Not patching the following package(s): ${available_updates - updates_install} due to the configured blocklist.": }
+        }
       }
       default: {
         $whitelisted_updates  = $available_updates.filter |$item| { $item in $allowlist }
@@ -363,8 +364,9 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
-        notify { "available_updates: ${available_updates}": }
-        notify { "updates_to_install: ${updates_to_install}": }
+        if ($available_updates.length > $updates_to_install.length) {
+          notify { "Not patching the following package(s): ${available_updates - updates_install} due to the configured blocklist.": }
+        }
       }
     }
 
