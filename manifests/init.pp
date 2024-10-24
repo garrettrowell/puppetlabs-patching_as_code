@@ -334,6 +334,7 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
+        notify { "updates_to_install: ${updates_to_install}": }
       }
       default: {
         $whitelisted_updates          =   $available_updates.filter |$item| { $item in $allowlist }
@@ -344,6 +345,7 @@ class patching_as_code (
         } else {
           $updates_to_install = $_updates_to_install
         }
+        notify { "updates_to_install: ${updates_to_install}": }
       }
     }
 
