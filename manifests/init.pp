@@ -112,6 +112,7 @@ class patching_as_code (
   Variant[String,Array[String]] $patch_group, #lint:ignore:parameter_documentation
   Hash                          $patch_schedule,
   Array                         $blocklist,
+  Enum['strict','fuzzy']        $blocklist_mode = 'strict',
   Array                         $allowlist,
   Array                         $blocklist_choco,
   Array                         $allowlist_choco,
@@ -327,8 +328,16 @@ class patching_as_code (
 
     case $allowlist.count {
       0: {
-        $_updates_to_install          = $available_updates.filter |$item| { !($item in $blocklist) }
-        $high_prio_updates_to_install = $high_prio_updates.filter |$item| { !($item in $blocklist) }
+        case $blocklist_mode {
+          'strict': {
+            $_updates_to_install          = $available_updates.filter |$item| { !($item in $blocklist) }
+            $high_prio_updates_to_install = $high_prio_updates.filter |$item| { !($item in $blocklist) }
+          }
+          'fuzzy': {
+            $_updates_to_install          = patching_as_code::fuzzy_filter($available_updates, $blocklist)
+            $high_prio_updates_to_install = patching_as_code::fuzzy_filter($high_prio_updates, $blocklist)
+          }
+        }
         if ($bool_patch_day and $bool_high_prio_patch_day) {
           $updates_to_install = $_updates_to_install.filter |$item| { !($item in $high_prio_updates_to_install) }
         } else {
@@ -337,9 +346,17 @@ class patching_as_code (
         notify { "updates_to_install: ${updates_to_install}": }
       }
       default: {
-        $whitelisted_updates          =   $available_updates.filter |$item| { $item in $allowlist }
-        $_updates_to_install          = $whitelisted_updates.filter |$item| { !($item in $blocklist) }
-        $high_prio_updates_to_install =   $high_prio_updates.filter |$item| { !($item in $blocklist) }
+        $whitelisted_updates  = $available_updates.filter |$item| { $item in $allowlist }
+        case $blocklist_mode {
+          'strict': {
+            $_updates_to_install          = $whitelisted_updates.filter |$item| { !($item in $blocklist) }
+            $high_prio_updates_to_install = $high_prio_updates.filter |$item| { !($item in $blocklist) }
+          }
+          'fuzzy': {
+            $_updates_to_install          = patching_as_code::fuzzy_filter($whitelisted_updates, $blocklist)
+            $high_prio_updates_to_install = patching_as_code::fuzzy_filter($high_prio_updates, $blocklist)
+          }
+        }
         if ($bool_patch_day and $bool_high_prio_patch_day) {
           $updates_to_install = $_updates_to_install.filter |$item| { !($item in $high_prio_updates_to_install) }
         } else {
