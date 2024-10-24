@@ -131,6 +131,7 @@ class patching_as_code (
   Boolean                       $classify_pe_patch = false,
   Boolean                       $patch_on_metered_links = false,
   Optional[String]              $plan_patch_fact = undef,
+  Optional[Array]               $install_options = undef,
 ) {
   # Create an extra stage to perform the reboot at the very end of the run
   stage { 'patch_reboot': }
@@ -460,6 +461,7 @@ class patching_as_code (
                 choco_updates           => $choco_updates_to_install.unique,
                 high_prio_updates       => $high_prio_updates_to_install.unique,
                 high_prio_choco_updates => $high_prio_choco_updates_to_install.unique,
+                install_options         => $install_options,
                 require                 => Anchor['patching_as_code::start'],
                 before                  => Anchor['patching_as_code::post'],
               } -> file { "${facts['puppet_vardir']}/../../patching_as_code":

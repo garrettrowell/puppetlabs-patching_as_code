@@ -13,6 +13,9 @@ Puppet::Type.newtype(:patch_package) do
   newparam(:chocolatey) do
     desc 'Whether this is a Chocolatey package (Windows only)'
   end
+  newparam(:install_options) do
+    desc 'Array of install options to optionally pass'
+  end
 
   # All parameters are required
   validate do
@@ -36,12 +39,14 @@ Puppet::Type.newtype(:patch_package) do
       [Puppet::Type.type(:package).new(name: name,
                                       ensure: 'latest',
                                       provider: 'chocolatey',
+                                      install_options: self[:install_options],
                                       schedule: self[:patch_window],
                                       before: 'Anchor[patching_as_code::patchday::end]')]
     else
       [Puppet::Type.type(:package).new(name: name,
                                         ensure: 'latest',
                                         schedule: self[:patch_window],
+                                        install_options: self[:install_options],
                                         before: 'Anchor[patching_as_code::patchday::end]')]
     end
   end
@@ -63,6 +68,7 @@ Puppet::Type.newtype(:patch_package) do
         catalog.resource(package_res)['ensure'] = 'latest'
         catalog.resource(package_res)['provider'] = 'chocolatey' if self[:chocolatey] == true
         catalog.resource(package_res)['schedule'] = self[:patch_window]
+        catalog.resource(package_res)['install_options'] = self[:install_options]
         catalog.resource(package_res)['before'] = Array(res['before']) + ['Anchor[patching_as_code::patchday::end]']
         catalog.resource(package_res)['require'] = (Array(res['require']) + ['Exec[Patching as Code - Clean Cache]']) if self[:chocolatey] == false
       else

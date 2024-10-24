@@ -15,6 +15,7 @@ class patching_as_code::linux::patchday (
   Array $choco_updates = [],
   Array $high_prio_updates = [],
   Array $high_prio_choco_updates = []
+  Array $install_options = []
 ) {
   case $facts['package_provider'] {
     'yum': {
@@ -48,9 +49,10 @@ class patching_as_code::linux::patchday (
 
     $updates.each | $package | {
       patch_package { $package:
-        patch_window => 'Patching as Code - Patch Window',
-        chocolatey   => false,
-        require      => Exec['Patching as Code - Clean Cache'],
+        patch_window    => 'Patching as Code - Patch Window',
+        chocolatey      => false,
+        install_options => $install_options,
+        require         => Exec['Patching as Code - Clean Cache'],
       }
     }
   }
@@ -64,9 +66,10 @@ class patching_as_code::linux::patchday (
 
     $high_prio_updates.each | $package | {
       patch_package { $package:
-        patch_window => 'Patching as Code - High Priority Patch Window',
-        chocolatey   => false,
-        require      => Exec['Patching as Code - Clean Cache (High Priority)'],
+        patch_window    => 'Patching as Code - High Priority Patch Window',
+        chocolatey      => false,
+        install_options => $install_options,
+        require         => Exec['Patching as Code - Clean Cache (High Priority)'],
       }
     }
   }
