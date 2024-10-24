@@ -14,7 +14,8 @@ class patching_as_code::windows::patchday (
   Array $updates,
   Array $choco_updates,
   Array $high_prio_updates = [],
-  Array $high_prio_choco_updates = []
+  Array $high_prio_choco_updates = [],
+  Array $install_options = [],
 ) {
   if $updates.count > 0 {
     $updates.each | $kb | {
@@ -37,8 +38,9 @@ class patching_as_code::windows::patchday (
   if $choco_updates.count > 0 {
     $choco_updates.each | $package | {
       patch_package { $package:
-        patch_window => 'Patching as Code - Patch Window',
-        chocolatey   => true,
+        patch_window    => 'Patching as Code - Patch Window',
+        install_options => $install_options,
+        chocolatey      => true,
       }
     }
   }
@@ -46,8 +48,9 @@ class patching_as_code::windows::patchday (
   if $high_prio_choco_updates.count > 0 {
     $high_prio_choco_updates.each | $package | {
       patch_package { $package:
-        patch_window => 'Patching as Code - High Priority Patch Window',
-        chocolatey   => true,
+        patch_window    => 'Patching as Code - High Priority Patch Window',
+        install_options => $install_options,
+        chocolatey      => true,
       }
     }
   }
