@@ -27,7 +27,6 @@ define patching_as_code::kb (
             provider  => 'powershell',
             timeout   => 14400,
             logoutput => true,
-            repeat    => 5,
             schedule  => $maintwindow,
           }
         }
@@ -41,7 +40,6 @@ define patching_as_code::kb (
             provider  => 'powershell',
             timeout   => 14400,
             logoutput => true,
-            repeat    => 5,
             schedule  => $maintwindow,
           }
         }
