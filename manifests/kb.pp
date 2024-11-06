@@ -27,11 +27,13 @@ define patching_as_code::kb (
             provider  => 'powershell',
             timeout   => 14400,
             logoutput => true,
+            repeat    => 5,
             schedule  => $maintwindow,
           }
         }
         default: {
           notify {"${kb} should call script": }
+          notify {"${kb} schedule: ${maintwindow}": }
           #Run update if it hasn't successfully run before
           exec { "Install ${kb}":
             command   => template('patching_as_code/install_kb.ps1.erb'),
@@ -39,6 +41,7 @@ define patching_as_code::kb (
             provider  => 'powershell',
             timeout   => 14400,
             logoutput => true,
+            repeat    => 5,
             schedule  => $maintwindow,
           }
         }
