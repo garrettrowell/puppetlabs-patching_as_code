@@ -29,6 +29,7 @@ define patching_as_code::kb (
           }
         }
         default: {
+          notify {"${kb} should call script": }
           #Run update if it hasn't successfully run before
           exec { "Install ${kb}":
             command   => template('patching_as_code/install_kb.ps1.erb'),
