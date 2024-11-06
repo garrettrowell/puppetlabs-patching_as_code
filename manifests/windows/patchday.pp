@@ -19,6 +19,7 @@ class patching_as_code::windows::patchday (
 ) {
   if $updates.count > 0 {
     $updates.each | $kb | {
+      notify { "should be installing: ${kb}": }
       patching_as_code::kb { $kb:
         ensure      => 'present',
         maintwindow => 'Patching as Code - Patch Window',
