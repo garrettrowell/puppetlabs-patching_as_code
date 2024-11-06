@@ -19,6 +19,7 @@ define patching_as_code::kb (
     'enabled', 'present': {
       case $kb {
         'KB890830', 'KB2267602', 'KB2461484', 'KB4052623': {
+          notify {"${kb} should call script": }
           #Don't skip recurring monthly updates (Malicious Software Removal Tool, Windows Defender/SCEP updates)
           exec { "Install ${kb}":
             command   => template('patching_as_code/install_kb.ps1.erb'),
