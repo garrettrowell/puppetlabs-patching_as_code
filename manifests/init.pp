@@ -257,7 +257,6 @@ class patching_as_code (
     show_diff => false,
   }
 
-  notify { "pac_bool_patch_day: ${bool_patch_day}": }
   if $bool_patch_day or $bool_high_prio_patch_day {
     if $facts[$patch_fact] {
       $available_updates = $facts['kernel'] ? {
@@ -347,7 +346,6 @@ class patching_as_code (
         }
       }
     }
-    notify { "pac_updates_to_install: ${updates_to_install}": }
 
     case $allowlist_choco.count {
       0: {

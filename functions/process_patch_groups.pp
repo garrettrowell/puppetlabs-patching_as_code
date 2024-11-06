@@ -34,7 +34,6 @@ function patching_as_code::process_patch_groups(
       default => false
     }
     if $bool_patch_day {
-      notify { "PAC - Patch Window: ${patching_as_code::patch_schedule[$active_pg]['hours']}": }
       schedule { 'Patching as Code - Patch Window':
         range  => $patching_as_code::patch_schedule[$active_pg]['hours'],
         repeat => $patching_as_code::patch_schedule[$active_pg]['max_runs'],
